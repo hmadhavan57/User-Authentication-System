@@ -11,18 +11,11 @@ function Signup() {
   const [error, setError] = useState();
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    // Specify your API endpoint URL for signup
-    axios.post('', { name, mobile, email, password })
-      .then(result => {
-        // Handle success, e.g., show a success message or redirect
-        console.log(result.data);
-      })
-      .catch(err => {
-        // Handle error, e.g., show error message to the user
-        setError(err.response.data.message);
-      });
-  };
+    e.preventDefault()
+    axios.post('http://localhost:3001/register',{name,mobile,email,password})
+    .then(result => console.log(result))
+    .catch(err => console.log(err))
+  }
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-success vh-100">
