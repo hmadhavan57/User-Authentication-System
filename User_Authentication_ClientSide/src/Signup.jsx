@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,6 @@ function Signup() {
   const [mobile, setMobile] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [error, setError] = useState();
   const navigate = useNavigate()
 
   const handleSubmit = (e) => {
@@ -25,7 +24,7 @@ function Signup() {
     <div className="d-flex justify-content-center align-items-center bg-success vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2>User Registration</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
+
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label htmlFor="name"><strong>Name</strong></label>
