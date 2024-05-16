@@ -4,32 +4,33 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-  
- 
+
+
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate()
 
+  axios.defaults.withCredentials = true;
   const handleSubmit = (e) => {
     e.preventDefault()
-    axios.post('http://localhost:3001/login',{email,password})
-    .then(result => {
-            console.log(result)
-        if(result.data === "Success"){
-      navigate('/home')
+    axios.post('http://localhost:3001/login', { email, password })
+      .then(result => {
+        console.log(result)
+        if (result.data === "Success") {
+          navigate('/home')
         }
-    })
-    .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
   }
 
   return (
     <div className="d-flex justify-content-center align-items-center bg-success vh-100">
       <div className="bg-white p-3 rounded w-25">
         <h2>User Login</h2>
-       
+
         <form onSubmit={handleSubmit}>
-          
-          
+
+
           <div className="mb-3">
             <label htmlFor="email"><strong>Email</strong></label>
             <input
