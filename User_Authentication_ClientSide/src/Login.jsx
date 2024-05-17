@@ -55,7 +55,10 @@ function Login() {
           </div>
           <button className="btn btn-success w-100 rounded-0">Login</button>
         </form>
-        <p className="mt-1">If you have an Account yet?</p>
+        <p className="mt-1">If you have an Account yet?
+          <br />
+          <Link to="/forget-password">Forget Password</Link>
+        </p>
         <Link to="/register" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Register</Link>
       </div>
     </div>

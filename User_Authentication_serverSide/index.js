@@ -5,6 +5,7 @@ const UserModel = require("./models/User")
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
+const nodemailer = require('nodemailer')
 
 
 const app = express()
@@ -29,6 +30,27 @@ const verifyUser = (req, res, next) => {
         })
     }
 }
+
+
+app.post('/reset-password/:id/:token', (req, res) => {
+    const { id, token } = req.params
+    const { password } = req.body
+
+    jwt.verify(token, "jwt_secret_key", (err, decoded) => {
+        if (err) {
+            return res.json({ Status: "Error with token" })
+        } else {
+            bcrypt.hash(password, 10)
+                .then(hash => {
+                    UserModel.findByIdAndUpdate({ _id: id }, { password: hash })
+                        .then(u => res.send({ Status: "Success" }))
+                        .catch(err => res.send({ Status: err }))
+                })
+                .catch(err => res.send({ Status: err }))
+        }
+    })
+})
+
 
 app.get('./home', verifyUser, (req, res) => {
     return res.json("Success")
@@ -70,4 +92,40 @@ app.post('/register', (req, res) => {
 
 app.listen(3001, () => {
     console.log("server is running")
+})
+
+
+app.post('/forget-password', (req, res) => {
+    const { email } = req.body;
+    UserModel.findOne({ email: email })
+        .then(user => {
+            if (!user) {
+                return res.send({ Status: "User is not existed" })
+            }
+            const token = jwt.sign({ id: user._id }, "jwt_secret_key", { expiresIn: "1d" })
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'hmadhavan57@gmail.com',
+                    pass: '123@Harish'
+                }
+            });
+
+            var mailOptions = {
+                from: 'hmadhavan57@gmail.com',
+                to: email,
+                subject: 'Reset your Password',
+                text: `http://localhost:3001/reset-password/${user._id}/${token}`
+            };
+
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log(error);
+                    return res.send({ Status: "Error sending email" });
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    return res.send({ Status: "Success" })
+                }
+            });
+        })
 })
