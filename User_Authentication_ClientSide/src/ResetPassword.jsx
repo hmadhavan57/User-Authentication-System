@@ -1,25 +1,23 @@
-import React from 'react'
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import axios from 'axios'
-
+import React, { useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 function ResetPassword() {
-    const [password, setPassword] = useState()
-    const navigate = useNavigate()
-    const { id, token } = useParams()
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+    const { id, token } = useParams();
 
-    axios.defaults.withCredentials = true;
     const handleSubmit = (e) => {
-        e.preventDefault()
+        e.preventDefault();
+        // Use the correct backend route for the reset password
         axios.post(`http://localhost:3001/reset-password/${id}/${token}`, { password })
             .then(res => {
                 if (res.data.Status === "Success") {
-                    navigate('/login')
-
+                    navigate('/login'); // Redirect to login on success
                 }
-            }).catch(err => console.log(err))
-    }
+            })
+            .catch(err => console.log(err)); // Log any errors
+    };
 
     return (
         <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
@@ -27,7 +25,7 @@ function ResetPassword() {
                 <h4>Reset Password</h4>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="email">
+                        <label htmlFor="password">
                             <strong>New Password</strong>
                         </label>
                         <input
@@ -43,10 +41,9 @@ function ResetPassword() {
                         Update
                     </button>
                 </form>
-
             </div>
         </div>
-    )
+    );
 }
 
 export default ResetPassword;

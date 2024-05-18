@@ -45,24 +45,6 @@ app.get('./dashboard', verifyUser, (req, res) => {
 })
 
 
-app.post('/reset-password/:id/:token', (req, res) => {
-    const { id, token } = req.params
-    const { password } = req.body
-
-    jwt.verify(token, "jwt_secret_key", (err, decoded) => {
-        if (err) {
-            return res.json({ Status: "Error with token" })
-        } else {
-            bcrypt.hash(password, 10)
-                .then(hash => {
-                    UserModel.findByIdAndUpdate({ _id: id }, { password: hash })
-                        .then(u => res.send({ Status: "Success" }))
-                        .catch(err => res.send({ Status: err }))
-                })
-                .catch(err => res.send({ Status: err }))
-        }
-    })
-})
 
 
 app.get('./home', verifyUser, (req, res) => {
@@ -108,6 +90,8 @@ app.listen(3001, () => {
 })
 
 
+
+
 app.post('/forget-password', (req, res) => {
     const { email } = req.body;
     UserModel.findOne({ email: email })
@@ -128,7 +112,7 @@ app.post('/forget-password', (req, res) => {
                 from: 'hmadhavan57@gmail.com',
                 to: email,
                 subject: 'Reset your Password',
-                text: `http://localhost:3001/reset-password/${user._id}/${token}`
+                text: `http://localhost:3001/reset_password/${user._id}/${token}`
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -136,9 +120,34 @@ app.post('/forget-password', (req, res) => {
                     console.log(error);
                     return res.send({ Status: "Error sending email" });
                 } else {
-
+                    console.log("Success");
                     return res.send({ Status: "Success" })
                 }
             });
         })
 })
+
+
+app.post('/reset-password/:id/:token', (req, res) => {
+    const { id, token } = req.params
+    const { password } = req.body
+
+    jwt.verify(token, "jwt_secret_key", (err, decoded) => {
+        if (err) {
+            return res.json({ Status: "Error with token" })
+        } else {
+            bcrypt.hash(password, 10)
+                .then(hash => {
+                    UserModel.findByIdAndUpdate({ _id: id }, { password: hash })
+                        .then(u => res.send({ Status: "Success" }))
+                        .catch(err => res.send({ Status: err }))
+                })
+                .catch(err => res.send({ Status: err }))
+        }
+    })
+})
+
+app.get('/reset_password/:id/:token', (req, res) => {
+    // Serve a simple HTML page or redirect to the frontend route
+    res.redirect(`http://localhost:5173/reset_password/${req.params.id}/${req.params.token}`);
+});
