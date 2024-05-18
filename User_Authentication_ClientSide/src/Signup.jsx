@@ -1,10 +1,11 @@
 import { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  
+
   const [name, setName] = useState();
   const [mobile, setMobile] = useState();
   const [email, setEmail] = useState();
@@ -13,11 +14,13 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    axios.post('http://localhost:3001/register',{name,mobile,email,password})
-    .then(result => {console.log(result)
-      navigate('/login')
-    })
-    .catch(err => console.log(err))
+    axios.post('http://localhost:3001/register', { name, mobile, email, password })
+      .then(result => {
+        alert("Created")
+        console.log(result)
+        navigate('/login')
+      })
+      .catch(err => console.log(err))
   }
 
   return (

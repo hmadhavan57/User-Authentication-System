@@ -25,11 +25,24 @@ const verifyUser = (req, res, next) => {
         return res.json("The token was not available");
     } else {
         jwt.verify(token, "jwt-secert-key", (err, decoded) => {
-            if (err) return res.json("Token is wrong")
-            next();
+            if (err) {
+                return res.json("Error with token")
+            }
+            else {
+                if (decoded.role === "admin") {
+                    next();
+                } else {
+                    return res.json("Not admin")
+                }
+            }
+
         })
     }
 }
+
+app.get('./dashboard', verifyUser, (req, res) => {
+    return res.json("Success")
+})
 
 
 app.post('/reset-password/:id/:token', (req, res) => {
@@ -64,9 +77,9 @@ app.post("/login", (req, res) => {
             if (user) {
                 bcrypt.compare(password, user.password, (err, response) => {
                     if (response) {
-                        const token = jwt.sign({ email: user.email }, "jwt-secret-key", { expiresIn: "1d" })
+                        const token = jwt.sign({ email: user.email, role: user.role }, "jwt-secret-key", { expiresIn: "1d" })
                         res.cookie("token", token);
-                        res.json("Success")
+                        return res.json({ Status: "Success", role: user.role })
                     } else {
                         res.json("Wrong Password")
                     }
@@ -83,9 +96,9 @@ app.post('/register', (req, res) => {
     bcrypt.hash(password, 10)
         .then(hash => {
             UserModel.create({ name, mobile, email, password: hash })
-                .then(user => res.json(user))
+                .then(user => res.json("Succes"))
                 .catch(err => res.json(err))
-        }).catch(err => console.log(err.message))
+        }).catch(err => console.log(err))
 
 })
 
@@ -107,7 +120,7 @@ app.post('/forget-password', (req, res) => {
                 service: 'gmail',
                 auth: {
                     user: 'hmadhavan57@gmail.com',
-                    pass: '123@Harish'
+                    pass: 'xovf zlhy ufhw cpbx'
                 }
             });
 
@@ -123,7 +136,7 @@ app.post('/forget-password', (req, res) => {
                     console.log(error);
                     return res.send({ Status: "Error sending email" });
                 } else {
-                    console.log('Email sent: ' + info.response);
+
                     return res.send({ Status: "Success" })
                 }
             });

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
@@ -9,18 +10,27 @@ function Login() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const navigate = useNavigate()
+  const [error, setError] = useState();
 
   axios.defaults.withCredentials = true;
   const handleSubmit = (e) => {
     e.preventDefault()
     axios.post('http://localhost:3001/login', { email, password })
-      .then(result => {
-        console.log(result)
-        if (result.data === "Success") {
-          navigate('/home')
+      .then(res => {
+        if (res.data.Status === "Success") {
+          if (res.data.role === "admin") {
+            navigate('/dashboard')
+          }
+          else {
+            navigate('/')
+          }
         }
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err),
+          setError('Registration failed. Please try again.')
+      }
+      )
   }
 
   return (
