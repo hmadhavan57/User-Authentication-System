@@ -21,7 +21,7 @@ function Login() {
           if (res.data.role === "admin") {
             navigate('/dashboard')
           }
-          else {
+          else if (res.data.role === "visitor") {
             navigate('/')
           }
         }
