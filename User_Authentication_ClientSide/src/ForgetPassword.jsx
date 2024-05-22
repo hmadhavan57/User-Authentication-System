@@ -14,7 +14,7 @@ function ForgetPassword() {
         e.preventDefault()
         axios.post('http://localhost:3001/forget-password', { email })
             .then(res => {
-                console.log("login :" + res.data)
+                console.log(res.data)
                 if (res.data.Status === "Success") {
                     navigate('/login')
                 }

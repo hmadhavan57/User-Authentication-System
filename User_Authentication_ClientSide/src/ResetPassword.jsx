@@ -9,14 +9,13 @@ function ResetPassword() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Use the correct backend route for the reset password
-        axios.post(`http://localhost:3001/reset-password/${id}/${token}`, { password })
+        axios.post(`http://localhost:3001/reset_password/${id}/${token}`, { password })
             .then(res => {
                 if (res.data.Status === "Success") {
-                    navigate('/login'); // Redirect to login on success
+                    navigate('/login');
                 }
             })
-            .catch(err => console.log(err)); // Log any errors
+            .catch(err => console.log(err));
     };
 
     return (
@@ -31,7 +30,7 @@ function ResetPassword() {
                         <input
                             type="password"
                             placeholder="Enter Password"
-                            autoComplete="off"
+                            autoComplete="new-password"
                             name="password"
                             className="form-control rounded-0"
                             onChange={(e) => setPassword(e.target.value)}

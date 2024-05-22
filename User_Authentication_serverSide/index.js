@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer');
 
-
 const app = express();
 app.use(express.json());
 app.use(cors({
@@ -28,10 +27,10 @@ const verifyUser = (req, res, next) => {
         if (err) {
             return res.json("Error with token");
         }
-        if (decoded.role === "admin") {
+        if (decoded.role === "admin" || decoded.role === "visitor") {
             next();
-        } else if (decoded.role === "visitor") {
-            next();
+        } else {
+            res.json("Unauthorized");
         }
     });
 };
@@ -57,6 +56,7 @@ app.post("/login", (req, res) => {
                     res.cookie("token", token);
                     return res.json({ Status: "Success", role: user.role });
                 } else {
+                    console.log("Wrong Password");
                     return res.json("Wrong Password");
                 }
             });
@@ -87,7 +87,7 @@ app.post('/forget-password', (req, res) => {
                 service: 'gmail',
                 auth: {
                     user: "hmadhavan57@gmail.com",
-                    pass: "xovf zlhy ufhw cpbx"
+                    pass: "skrh emhm vbki bojt"
                 }
             });
 
@@ -95,7 +95,7 @@ app.post('/forget-password', (req, res) => {
                 from: "hmadhavan57@gmail.com",
                 to: email,
                 subject: 'Reset your Password',
-                text: `http://localhost:3001/reset-password/${user._id}/${token}`
+                text: `http://localhost:5173/reset_password/${user._id}/${token}`
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -114,18 +114,17 @@ app.post('/forget-password', (req, res) => {
         });
 });
 
-
-app.post('/reset-password/:id/:token', (req, res) => {
+app.post('/reset_password/:id/:token', (req, res) => {
     const { id, token } = req.params;
     const { password } = req.body;
 
-    jwt.verify(token, "jwt_secret_key", (err, decoded) => {
+    jwt.verify(token, "jwt-secret-key", (err, decoded) => {
         if (err) {
             return res.json({ Status: "Error with token" });
         }
         bcrypt.hash(password, 10)
             .then(hash => {
-                UserModel.findByIdAndUpdate({ _id: id }, { password: hash })
+                UserModel.findByIdAndUpdate(id, { password: hash })
                     .then(() => res.send({ Status: "Success" }))
                     .catch(err => res.send({ Status: "Error updating password: " + err }))
             })
@@ -133,9 +132,9 @@ app.post('/reset-password/:id/:token', (req, res) => {
     })
 })
 
-// app.get('/reset_password/:id/:token', (req, res) => {
-//     res.redirect(`http://localhost:5173/reset_password/${req.params.id}/${req.params.token}`);
-// });
+app.get('/reset_password/:id/:token', (req, res) => {
+    res.redirect(`http://localhost:5173/reset_password/${req.params.id}/${req.params.token}`);
+});
 
 app.listen(3001, () => {
     console.log("Server is running");
