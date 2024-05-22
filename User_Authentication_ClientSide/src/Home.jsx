@@ -20,9 +20,9 @@ function Home() {
     }, [navigate]);
 
     const handleLogout = () => {
-        // Clear token from storage
+
         Cookies.remove('token');
-        // Redirect to login page
+
         navigate('/login');
     };
 
