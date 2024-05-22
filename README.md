@@ -64,8 +64,3 @@ Choose JavaScript as the language.
 
     ```bash
     npm start
-
-
-
-
-
