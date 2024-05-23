@@ -86,4 +86,4 @@ Choose JavaScript as the language.
 
 
 #### Registration Page
-![alt text](ScreenShot\register.png)
+![alt text](ScreenShot/register.png)
