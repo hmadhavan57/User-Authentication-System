@@ -87,3 +87,21 @@ Choose JavaScript as the language.
 
 #### Registration Page
 ![alt text](ScreenShot/register.png)
+
+#### Login Page
+![alt text](ScreenShot/login.png)
+
+#### Forget Password Page
+![alt text](ScreenShot/forgetPassword.png)
+
+#### Reset Password Page
+![alt text](ScreenShot/reset.png)
+
+
+#### Database Schema
+![alt text](ScreenShot/schema.png)
+
+#### Sample code
+![alt text](ScreenShot/sample1.png)
+
+![alt text](ScreenShot/sample2.png)
