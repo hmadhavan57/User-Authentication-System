@@ -1,32 +1,36 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate, useParams } from 'react-router-dom'; // Importing hooks for navigation and retrieving route parameters
+import axios from 'axios'; // Importing axios for HTTP requests
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'; // Importing FontAwesomeIcon for icons
+import { faEye, faEyeSlash, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'; // Importing specific icons
 
 function ResetPassword() {
+    // State hooks for password, confirmPassword, error, success, and showPassword
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
-    const { id, token } = useParams();
+    const navigate = useNavigate(); // Initializing useNavigate hook for navigation
+    const { id, token } = useParams(); // Retrieving parameters from the route
 
+    // Function to handle form submission
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Preventing default form submission
 
         if (password !== confirmPassword) {
             setError('Passwords do not match.');
             return;
         }
 
+        // Sending POST request to reset password endpoint
         axios.post(`http://localhost:3001/reset_password/${id}/${token}`, { password })
             .then(res => {
                 if (res.data.Status === "Success") {
                     setSuccess('Password updated successfully.');
                     setError('');
-                    setTimeout(() => navigate('/login'), 2000); // Navigate to login after 2 seconds
+                    // Redirecting to login page after 2 seconds
+                    setTimeout(() => navigate('/login'), 2000);
                 }
             })
             .catch(err => {
@@ -35,6 +39,7 @@ function ResetPassword() {
             });
     };
 
+    // Function to handle password input change
     const handlePasswordChange = (e) => {
         setPassword(e.target.value);
         if (confirmPassword && e.target.value !== confirmPassword) {
@@ -44,6 +49,7 @@ function ResetPassword() {
         }
     };
 
+    // Function to handle confirm password input change
     const handleConfirmPasswordChange = (e) => {
         setConfirmPassword(e.target.value);
         if (password && e.target.value !== password) {
@@ -53,6 +59,7 @@ function ResetPassword() {
         }
     };
 
+    // Function to toggle password visibility
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -68,13 +75,13 @@ function ResetPassword() {
                         </label>
                         <div className="input-group">
                             <input
-                                type={showPassword ? "text" : "password"}
+                                type={showPassword ? "text" : "password"} // Toggling password visibility
                                 placeholder="Enter Password"
                                 autoComplete="new-password"
                                 name="password"
                                 className="form-control rounded-0"
                                 value={password}
-                                onChange={handlePasswordChange}
+                                onChange={handlePasswordChange} // Updating password state on change
                             />
                             <button
                                 className="btn btn-outline-secondary"
@@ -91,13 +98,13 @@ function ResetPassword() {
                         </label>
                         <div className="input-group">
                             <input
-                                type={showPassword ? "text" : "password"}
+                                type={showPassword ? "text" : "password"} // Toggling password visibility
                                 placeholder="Confirm Password"
                                 autoComplete="new-password"
                                 name="confirmPassword"
                                 className="form-control rounded-0"
                                 value={confirmPassword}
-                                onChange={handleConfirmPasswordChange}
+                                onChange={handleConfirmPasswordChange} // Updating confirmPassword state on change
                             />
                             <button
                                 className="btn btn-outline-secondary"

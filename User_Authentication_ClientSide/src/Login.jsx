@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from "react-router-dom";
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 function Login() {
+  // State hooks for email, password, showPassword, error, and success messages
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -14,13 +15,15 @@ function Login() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  axios.defaults.withCredentials = true;
+  axios.defaults.withCredentials = true; // Ensure credentials are included in requests
 
+  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.post('http://localhost:3001/login', { email, password })
       .then(res => {
         if (res.data.Status === "Success") {
+          // Redirect user based on their role
           if (res.data.role === "admin") {
             navigate('/dashboard');
           } else if (res.data.role === "visitor") {
@@ -36,6 +39,7 @@ function Login() {
       });
   };
 
+  // Function to toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -79,13 +83,17 @@ function Login() {
               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
             </span>
           </div>
+          {/* Display error message if there is an error */}
           {error && <div className="alert alert-danger mb-3">{error}</div>}
+          {/* Display success message if there is a success message */}
           {success && <div className="alert alert-success mb-3">{success}</div>}
           <button className="btn btn-success w-100 rounded-0">Login</button>
         </form>
         <p className="mt-1">
-          If you have an account, <Link to="/register" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Register</Link>
+          {/* Link to the registration page */}
+          If you don't have an account, <Link to="/register" className="btn btn-default border w-100 bg-light rounded-0 text-decoration-none">Register</Link>
           <br />
+          {/* Link to the forget password page */}
           <Link to="/forget-password">Forgot Password?</Link>
         </p>
       </div>

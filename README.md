@@ -60,7 +60,24 @@ Choose JavaScript as the language.
     ```
 
 
-4. Start the server:
+4. Load the Nodemon for start the server:
+
+    Under the package.json , go to "scripts" , fill the "start" as "nodemon index.js"
+
+
+5. Start the server:
 
     ```bash
     npm start
+
+
+6. Create models folder for creating the database schema
+
+    Use the User.js for databse schema
+
+
+
+
+### Screenshot
+
+![alt text](<Screenshot 2024-05-23 080023.png>)
