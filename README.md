@@ -39,6 +39,7 @@ Choose JavaScript as the language.
 
     ```bash
     npm run dev    
+    ```
 
 ### Server Side App
 
@@ -46,11 +47,13 @@ Choose JavaScript as the language.
 
   ```bash
    cd server-End-App
+   ```
 
 2. Navigate to the project folder:
 
     ```bash
    cd server-End-App
+   ```
 
 3. Install dependencies:
 
@@ -69,6 +72,7 @@ Choose JavaScript as the language.
 
     ```bash
     npm start
+    ```
 
 
 6. Create models folder for creating the database schema
