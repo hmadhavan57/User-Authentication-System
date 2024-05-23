@@ -80,4 +80,6 @@ Choose JavaScript as the language.
 
 ### Screenshot
 
-![alt text](<Screenshot 2024-05-23 080023.png>)
+
+#### Registration Page
+![alt text](ScreenShot\register.png)
